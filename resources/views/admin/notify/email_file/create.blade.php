@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-    <title>ایجاد اطلاعیه ایمیلی</title>
+    <title>ایجاد فایل اطلاعیه ایمیلی</title>
     <link rel="stylesheet" href="{{ asset('admin-assets/jalalidatepicker/persian-datepicker.min.css') }}">
 @endsection
 
@@ -10,8 +10,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
             <li class="breadcrumb-item font-size-12"> <a href="#">اطلاع رسانی</a></li>
-            <li class="breadcrumb-item font-size-12"> <a href="#">اطلاعیه ایمیلی</a></li>
-            <li class="breadcrumb-item font-size-12 active" aria-current="page"> ایجاد اطلاعیه ایمیلی</li>
+            <li class="breadcrumb-item font-size-12"> <a href="#">اطلاعیه {{ $email->subject }} </a></li>
+            <li class="breadcrumb-item font-size-12"> <a href="#">فایل های اطلاعیه {{ $email->subject }}</a></li>
+            <li class="breadcrumb-item font-size-12 active" aria-current="page">ایجاد فایل اطلاعیه {{ $email->subject }}
+            </li>
         </ol>
     </nav>
 
@@ -21,66 +23,29 @@
             <section class="main-body-container">
                 <section class="main-body-container-header">
                     <h5>
-                        ایجاد اطلاعیه ایمیلی
+                        ایجاد فایل اطلاعیه ایمیلی {{ $email->subject }}
                     </h5>
                 </section>
 
                 <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
-                    <a href="{{ route('admin.notify.email.index') }}" class="btn btn-info btn-sm">بازگشت</a>
+                    <a href="{{ route('admin.notify.email_file.index', $email->id) }}"
+                        class="btn btn-info btn-sm">بازگشت</a>
                 </section>
 
                 <section>
-                    <form action="{{ route('admin.notify.email.store') }}" method="POST">
+                    <form action="{{ route('admin.notify.email_file.store', $email->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <section class="row">
 
-                            <section class="col-12 ">
-                                <div class="form-group">
-                                    <label for="">عنوان ایمیل</label>
-                                    <input type="text" class="form-control form-control-sm" name="subject"
-                                        value="{{ old('subject') }}">
-                                </div>
-                                @error('subject')
-                                    <div class="">
-                                        <span class="alert_require text-danger ">
-                                            <strong>
-                                                {{ $message }}
-                                            </strong>
-                                        </span>
-                                    </div>
-                                @enderror
-                            </section>
-
-
                             <section class="col-12 col-md-6">
                                 <div class="form-group">
-                                    <label for="">تاریخ انتشار</label>
-                                    <input type="text" name="published_at" id="published_at"
-                                        class="form-control form-control-sm d-none" value="{{ old('published_at') }}">
-                                    <input type="text" id="published_at_view" class="form-control form-control-sm"
-                                        value="{{ old('published_at') }}">
+                                    <label for="file">فایل </label>
+                                    <input type="file" name="file" 
+                                        class="form-control form-control-sm">
+                                    <span class="p-3 text-danger" style="font-size: 15px">فایل هایی که میتوانید آپلود
+                                        کنید:image, word, power point, video </span>
                                 </div>
-                                @error('published_at')
-                                    <div class="">
-                                        <span class="alert_require text-danger ">
-                                            <strong>
-                                                {{ $message }}
-                                            </strong>
-                                        </span>
-                                    </div>
-                                @enderror
-                            </section>
-                            <section class="col-12 col-md-6">
-                                <div class="form-group">
-                                    <label for="">وضعیت</label>
-                                    <select name="status" id="" class="form-control form-control-sm">
-                                        <option value="0" @if (old('status') == 0) selected @endif> غیرفعال
-                                        </option>
-                                        <option value="1" @if (old('status') == 1) selected @endif> فعال
-                                        </option>
-                                    </select>
-                                </div>
-                                @error('status')
+                                @error('file')
                                     <div class="">
                                         <span class="alert_require text-danger ">
                                             <strong>
@@ -91,21 +56,6 @@
                                 @enderror
                             </section>
 
-                            <section class="col-12">
-                                <div class="form-group">
-                                    <label for="">متن ایمیل</label>
-                                    <textarea name="body" id="body" class="form-control form-control-sm" rows="6">{{ old('body') }}</textarea>
-                                </div>
-                                @error('body')
-                                    <div class="">
-                                        <span class="alert_require text-danger ">
-                                            <strong>
-                                                {{ $message }}
-                                            </strong>
-                                        </span>
-                                    </div>
-                                @enderror
-                            </section>
 
 
 

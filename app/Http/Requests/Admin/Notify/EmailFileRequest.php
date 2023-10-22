@@ -11,7 +11,7 @@ class EmailFileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,15 @@ class EmailFileRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        if ($this->isMethod('post')) {
+            return [
+                'file' => 'required|file|max:50906206',
+
+            ];
+        } else {
+            return [
+                'file' => 'required|file|size:50906206',
+            ];
+        };
     }
 }
