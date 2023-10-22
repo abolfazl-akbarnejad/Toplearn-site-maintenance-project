@@ -50,8 +50,8 @@
                                 <tr>
                                     <th>{{ $key += 1 }}</th>
                                     <td>{{ $email->subject }}</td>
-                                    <td>{{ $mail->file_path }}</td>
-                                    <td>{{ $mail->file_size }}</td>
+                                    <td>{{ $mail->file_type }}</td>
+                                    <td>مگابایت {{ $mail->file_size }} </td>
                                     <td>
                                         <label>
                                             <input id="{{ $email->id }}" onchange="changeStatus({{ $email->id }})"
