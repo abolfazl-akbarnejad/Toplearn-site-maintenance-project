@@ -61,4 +61,74 @@ class EmailFileController extends Controller
             return redirect()->route('admin.notify.email_file.index', $email->id)->with('error', " آپلود فایل شما با خطا مواجه شد");
         }
     }
+
+    public function edit($id)
+    {
+        $emailfile = EmailFile::findOrFail($id);
+
+        $email = $emailfile->email;
+        return view('admin.notify.email_file.edit', compact('emailfile', 'email'));
+    }
+
+    public function update(Request $request, $id, FileService $fileService)
+    {
+        $emailfile = EmailFile::findOrFail($id);
+        $email = $emailfile->email;
+
+        $inputs = $request->all();
+
+        if ($request->hasFile('file')) {
+            $fileService->setExclusiveDirectory('files' . DIRECTORY_SEPARATOR  . 'email_file');
+            $fileService->setFileSize($request->file('file'));
+            $fileSize = $fileService->getFileSize();
+            $resultFile = $fileService->moveToPublic($request->file('file'));
+            $fileType = $fileService->getFileFormat();
+            $delete = $fileService->deleteFile($emailfile->file_path);
+        }
+
+
+        $inputs['file_path'] = $resultFile;
+        $inputs['file_size'] = $fileSize;
+        $inputs['file_type'] = $fileType;
+
+        $result = $emailfile->update($inputs);
+        if ($result) {
+            return redirect()->route('admin.notify.email_file.index', $email->id)->with('success', " ویرایش فایل شما با موفقیت انجام شد");
+        } else {
+            return redirect()->route('admin.notify.email_file.index', $email->id)->with('error', " ویرایش فایل شما با خطا مواجه شد");
+        }
+    }
+
+    public function destroy($id)
+    {
+
+        $emailfile = EmailFile::findOrFail($id);
+        $email = $emailfile->email;
+
+        $result = $emailfile->delete();
+
+        if ($result) {
+            return redirect()->route('admin.notify.email_file.index', $email->id)->with('success', "  فایل شما با موفقیت حذف  شد");
+        } else {
+            return redirect()->route('admin.notify.email_file.index', $email->id)->with('error', " حذف فایل شما با خطا مواجه شد");
+        }
+    }
+
+    public function status($id)
+    {
+        $emailfile = EmailFile::findOrFail($id);
+
+
+        $emailfile->status = $emailfile->status == 0 ? 1 : 0;
+        $result = $emailfile->save();
+        if ($result) {
+            if ($emailfile->status == 0) {
+                return response()->json(['status' => true, 'checked' => false]);
+            } else {
+                return response()->json(['status' => true, 'checked' => true]);
+            }
+        } else {
+            return response()->json(['status' => false]);
+        }
+    }
 }

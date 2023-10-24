@@ -33,15 +33,15 @@
                 </section>
 
                 <section>
-                    <form action="{{ route('admin.notify.email_file.store', $email->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.notify.email_file.store', $email->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <section class="row">
 
-                            <section class="col-12 col-md-6">
+                            <section class="col-12 ">
                                 <div class="form-group">
                                     <label for="file">فایل </label>
-                                    <input type="file" name="file" 
-                                        class="form-control form-control-sm">
+                                    <input type="file" name="file" class="form-control form-control-sm">
                                     <span class="p-3 text-danger" style="font-size: 15px">فایل هایی که میتوانید آپلود
                                         کنید:image, word, power point, video </span>
                                 </div>
@@ -55,7 +55,26 @@
                                     </div>
                                 @enderror
                             </section>
-
+                            <section class="col-12 ">
+                                <div class="form-group">
+                                    <label for="">وضعیت</label>
+                                    <select name="status" id="" class="form-control form-control-sm">
+                                        <option value="0" @if (old('status') == 0) selected @endif> غیرفعال
+                                        </option>
+                                        <option value="1" @if (old('status') == 1) selected @endif> فعال
+                                        </option>
+                                    </select>
+                                </div>
+                                @error('status')
+                                    <div class="">
+                                        <span class="alert_require text-danger ">
+                                            <strong>
+                                                {{ $message }}
+                                            </strong>
+                                        </span>
+                                    </div>
+                                @enderror
+                            </section>
 
 
 

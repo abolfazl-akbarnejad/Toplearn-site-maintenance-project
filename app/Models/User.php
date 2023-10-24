@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -17,6 +20,8 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use Sluggable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,10 +29,29 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'mobile',
+        'first_name',
+        'last_name',
+        'slug',
+        'profile_photo_path',
+        'activation',
+        'activation_date',
+        'status',
+        'user_type',
+
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'first_name' . 'last_name',
+            ]
+        ];
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

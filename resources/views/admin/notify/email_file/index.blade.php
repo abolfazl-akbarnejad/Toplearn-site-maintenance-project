@@ -46,27 +46,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($email->files as $key => $mail)
+                            @foreach ($email->files as $key => $file)
                                 <tr>
                                     <th>{{ $key += 1 }}</th>
                                     <td>{{ $email->subject }}</td>
-                                    <td>{{ $mail->file_type }}</td>
-                                    <td>مگابایت {{ $mail->file_size }} </td>
+                                    <td>{{ $file->file_type }}</td>
+                                    <td>مگابایت {{ $file->file_size }} </td>
                                     <td>
                                         <label>
-                                            <input id="{{ $email->id }}" onchange="changeStatus({{ $email->id }})"
-                                                data-url="{{ route('admin.content.email.status', $email->id) }}"
-                                                type="checkbox" @if ($email->status === 1) checked @endif>
+                                            <input id="{{ $file->id }}" onchange="changeStatus({{ $file->id }})"
+                                                data-url="{{ route('admin.content.email_file.status', $file->id) }}"
+                                                type="checkbox" @if ($file->status === 1) checked @endif>
                                         </label>
                                     </td>
                                     <td class="width-17-rem text-left">
 
-                                        <a href="{{ route('admin.notify.email.edit', $email->id) }}"
+                                        <a href="{{ route('admin.notify.email_file.edit', $file->id) }}"
                                             class="btn btn-info btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
 
 
-                                        <form action="{{ route('admin.notify.email.destroy', $email->id) }}" method="POST"
-                                            class="d-inline">
+                                        <form action="{{ route('admin.notify.email_file.destroy', $file->id) }}"
+                                            method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger btn-sm delete" type="submit"><i

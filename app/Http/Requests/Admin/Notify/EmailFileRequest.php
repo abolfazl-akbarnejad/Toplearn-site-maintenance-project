@@ -23,12 +23,12 @@ class EmailFileRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             return [
-                'file' => 'required|file|max:50906206',
+                'file' => 'required|file|max:50906206|mimes:png,jpg,jpeg,pdf,zip',
 
             ];
         } else {
             return [
-                'file' => 'required|file|size:50906206',
+                'file' => 'required|file|size:50906206|mimes:png,jpg,jpeg,pdf,zip',
             ];
         };
     }

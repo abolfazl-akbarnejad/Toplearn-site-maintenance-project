@@ -240,9 +240,9 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/', [AdminUserController::class, 'index'])->name('admin.user.admin-user.index');
             Route::get('/create', [AdminUserController::class, 'create'])->name('admin.user.admin-user.create');
             Route::post('/store', [AdminUserController::class, 'store'])->name('admin.user.admin-user.store');
-            Route::get('/edit/{id}', [AdminUserController::class, 'edit'])->name('admin.user.admin-user.edit');
-            Route::put('/update/{id}', [AdminUserController::class, 'update'])->name('admin.user.admin-user.update');
-            Route::delete('/destroy/{id}', [AdminUserController::class, 'destroy'])->name('admin.user.admin-user.destroy');
+            Route::get('/edit/{user}', [AdminUserController::class, 'edit'])->name('admin.user.admin-user.edit');
+            Route::put('/update/{user}', [AdminUserController::class, 'update'])->name('admin.user.admin-user.update');
+            Route::delete('/destroy/{user}', [AdminUserController::class, 'destroy'])->name('admin.user.admin-user.destroy');
         });
 
         //customer
@@ -294,10 +294,10 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/{email}', [EmailFileController::class, 'index'])->name('admin.notify.email_file.index');
             Route::get('{email}/create', [EmailFileController::class, 'create'])->name('admin.notify.email_file.create');
             Route::post('/{email}/store', [EmailFileController::class, 'store'])->name('admin.notify.email_file.store');
-            Route::get('/edit/{file}', [email_fileFileController::class, 'edit'])->name('admin.notify.email_file.edit');
-            Route::put('/update/{file}', [EmailFileController::class, 'update'])->name('admin.notify.email_file.update');
-            Route::delete('/destroy/{file}', [EmailFileController::class, 'destroy'])->name('admin.notify.email_file.destroy');
-            Route::get('/status/{file}', [EmailFileController::class, 'status'])->name('admin.content.email_file.status');
+            Route::get('/edit/{id}', [EmailFileController::class, 'edit'])->name('admin.notify.email_file.edit');
+            Route::put('/update/{id}', [EmailFileController::class, 'update'])->name('admin.notify.email_file.update');
+            Route::delete('/destroy/{id}', [EmailFileController::class, 'destroy'])->name('admin.notify.email_file.destroy');
+            Route::get('/status/{id}', [EmailFileController::class, 'status'])->name('admin.content.email_file.status');
         });
 
         //sms

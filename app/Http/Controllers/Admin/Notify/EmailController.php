@@ -106,6 +106,8 @@ class EmailController extends Controller
             abort(404);
         }
     }
+
+
     public function status(Email $email)
     {
 
