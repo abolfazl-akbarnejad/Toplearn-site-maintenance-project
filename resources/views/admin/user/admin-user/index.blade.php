@@ -40,6 +40,9 @@
                                 <th>نام</th>
                                 <th>نام خانوادگی</th>
                                 <th>نقش</th>
+                                <th>وضعیت</th>
+                                <th> وضعیت فعال سازی</th>
+
                                 <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
                             </tr>
                         </thead>
@@ -52,6 +55,21 @@
                                     <td>{{ $admin->first_name }} </td>
                                     <td>{{ $admin->last_name }} </td>
                                     <td>سوپر ادمین </td>
+                                    <td>
+                                        <label>
+                                            <input id="{{ $admin->id }}" onchange="changeStatus({{ $admin->id }})"
+                                                data-url="{{ route('admin.user.admin-user.status', $admin->id) }}"
+                                                type="checkbox" @if ($admin->status === 1) checked @endif>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input id="{{ $admin->id }}-activation"
+                                                onchange="changeActivation({{ $admin->id }})"
+                                                data-url="{{ route('admin.user.admin-user.activation', $admin->id) }}"
+                                                type="checkbox" @if ($admin->activation === 1) checked @endif>
+                                        </label>
+                                    </td>
                                     <td class="width-22-rem text-left">
                                         <a href="#" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> نقش</a>
                                         <a href="{{ route('admin.user.admin-user.edit', $admin->id) }}"
@@ -104,6 +122,33 @@
                     }
                 }
             })
+        }
+    </script>
+    <script type="text/javascript">
+        function changeActivation(id) {
+            var element = $("#" + id + '-activation')
+            var url = element.attr('data-url')
+            var elementValue = !element.prop('checked');
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(response) {
+                    if (response.commantable) {
+                        if (response.checked)
+                            element.prop('checked', true);
+
+                        else
+                            element.prop('checked', false);
+
+
+                    } else {
+                        // element.prop('checked', elementValue);
+                    }
+                }
+            })
+
+
         }
     </script>
 @endsection

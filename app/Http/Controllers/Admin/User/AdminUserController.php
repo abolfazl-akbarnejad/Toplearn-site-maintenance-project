@@ -76,9 +76,9 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(User $admin)
     {
-        return view('admin.user.admin-user.edit', compact('user'));
+        return view('admin.user.admin-user.edit', compact('admin'));
     }
 
     /**
@@ -88,20 +88,20 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user, ImageService $imageService)
+    public function update(AdminUserRequest $request, User $admin, ImageService $imageService)
     {
         $inputs = $request->all();
 
         if ($request->hasFile('profile_photo_path')) {
             $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'user');
             $resultImage =   $imageService->save($request->file('profile_photo_path'));
-            $imageService->deleteImage($user->profile_photo_path);
+            $imageService->deleteImage($admin->profile_photo_path);
             $inputs['profile_photo_path'] = $resultImage;
         }
         $inputs['password'] = Hash::make($request->password);
         $inputs['user_type'] = 1;
 
-        $result = $user->update($inputs);
+        $result = $admin->update($inputs);
         if ($result) {
             return redirect()->route('admin.user.admin-user.index')->with('success', 'ویرایش اطلاعات ادمین با موفقیت انجام شد');
         } else {
@@ -115,14 +115,47 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $admin)
     {
 
-        if ($user) {
-            $user->delete();
+        if ($admin) {
+            $admin->delete();
             return redirect()->route('admin.user.admin-user.index')->with('success', "دیتا شما با موفقیت حذف شد");
         } else {
             abort(404);
+        }
+    }
+
+    public function status(User $admin)
+    {
+
+        $admin->status = $admin->status == 0 ? 1 : 0;
+        $result = $admin->save();
+        if ($result) {
+            if ($admin->status == 0) {
+                return response()->json(['status' => true, 'checked' => false]);
+            } else {
+                return response()->json(['status' => true, 'checked' => true]);
+            }
+        } else {
+            return response()->json(['status' => false]);
+        }
+    }
+
+
+    public function activation(User $admin)
+    {
+
+        $admin->activation = $admin->activation == 0 ? 1 : 0;
+        $result = $admin->save();
+        if ($result) {
+            if ($admin->activation == 0) {
+                return response()->json(['activation' => true, 'checked' => false]);
+            } else {
+                return response()->json(['activation' => true, 'checked' => true]);
+            }
+        } else {
+            return response()->json(['activation' => false]);
         }
     }
 }

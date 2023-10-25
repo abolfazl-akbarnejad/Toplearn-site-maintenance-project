@@ -189,5 +189,7 @@ return [
         'question' => 'پرسش',
         'answer' => 'پاسخ',
         'body' => 'متن',
+        'national_code' => 'کد ملی',
+        'profile_photo_path' => "تصویر پروفایل"
     ],
 ];
