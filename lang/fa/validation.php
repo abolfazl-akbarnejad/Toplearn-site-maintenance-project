@@ -190,6 +190,7 @@ return [
         'answer' => 'پاسخ',
         'body' => 'متن',
         'national_code' => 'کد ملی',
-        'profile_photo_path' => "تصویر پروفایل"
+        'profile_photo_path' => "تصویر پروفایل",
+        'status' => 'وضعیت',
     ],
 ];

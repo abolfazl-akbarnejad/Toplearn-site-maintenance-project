@@ -38,6 +38,7 @@ class EmailController extends Controller
      */
     public function store(EmailRequest $request)
     {
+        dd($request);
         $inputs = $request->all();
         $realetimestampStart = intval(substr($request->published_at, 0, 10));
         $inputs['published_at'] = date('Y-m-d H:i:s', $realetimestampStart);
