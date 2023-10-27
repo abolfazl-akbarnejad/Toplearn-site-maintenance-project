@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\admin\user;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\User\RoleRequest;
+use App\Models\User\permission;
+use App\Models\User\Role;
+use Database\Seeders\Role\PermissionSeeder;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -14,7 +18,16 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('admin.user.role.index');
+        //check exist value in the table permision
+        $checkPermision = permission::first();
+        if ($checkPermision  == null) {
+            $defult = new PermissionSeeder;
+            $defult->run();
+        }
+        $roles = Role::orderBy('created_at', 'desc')->get();
+
+
+        return view('admin.user.role.index', compact('roles'));
     }
 
     /**
@@ -24,7 +37,16 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('admin.user.role.create');
+        //check exist value in the table permision
+        $checkPermision = permission::first();
+        if ($checkPermision  == null) {
+            $defult = new PermissionSeeder;
+            $defult->run();
+        }
+
+
+        $permisions = permission::all();
+        return view('admin.user.role.create', compact('permisions'));
     }
 
     /**
@@ -33,10 +55,21 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        //
+        $inputs = $request->all();
+        $resultRole = Role::create($inputs);
+        $inputs['permisions'] = $inputs['permisions'] ?? [];
+        $resultPermision = $resultRole->permissions()->sync($inputs['permisions']);
+        if ($resultRole && $resultPermision) {
+            return redirect()->route('admin.user.role.index')->with('success', 'نقش جدید با موفقیت اضافه شد');
+        } else {
+            return redirect()->route('admin.user.role.index')->with('error', 'خطا در ذخیره اطلاعات');
+        }
     }
+
+
+
 
     /**
      * Display the specified resource.
