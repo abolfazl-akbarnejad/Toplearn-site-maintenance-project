@@ -53,9 +53,7 @@ class SettingController extends Controller
      */
     public function update(Request $request, ImageService $imageService)
     {
-        // $setting = Setting::first();
-$inputs = $request->all();
-// $imageService->
+        $inputs = $request->all();
         dd($request);
     }
 

@@ -51,17 +51,27 @@
                                         @forelse ($role->permissions as $key => $pesmision)
                                             {{ $key + 1 }} - {{ $pesmision->name }}<br>
                                         @empty
-                                        هنوز دسرسی داده نشده
+                                            <span class="text-danger">
+                                                هنوز دسرسی داده نشده
+                                            </span>
                                         @endforelse
                                     </td>
 
                                     <td class="width-22-rem text-left">
-                                        <a href="#" class="btn btn-success btn-sm"><i class="fa fa-user-graduate"></i>
+                                        <a href="{{ route('admin.user.role.permissionForm', $role->id) }}"
+                                            class="btn btn-success btn-sm"><i class="fa fa-user-graduate"></i>
                                             دسترسی ها</a>
-                                        <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>
+                                        <a href="{{ route('admin.user.role.edit', $role->id) }}"
+                                            class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>
                                             ویرایش</a>
-                                        <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash-alt"></i>
-                                            حذف</button>
+                                        <form action="{{ route('admin.user.role.destroy', $role->id) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm delete" type="submit"><i
+                                                    class="fa fa-trash-alt"></i>
+                                                حذف</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

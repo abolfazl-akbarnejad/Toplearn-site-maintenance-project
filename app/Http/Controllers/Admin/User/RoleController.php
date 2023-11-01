@@ -77,7 +77,7 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
         //
     }
@@ -88,9 +88,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        return view('admin.user.role.edit', compact('role'));
     }
 
     /**
@@ -100,9 +100,14 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RoleRequest $request, Role $role)
     {
-        //
+        $result = $role->update($request->all());
+        if ($result) {
+            return redirect()->route('admin.user.role.index')->with('success', 'نقش  با موفقیت ویرایش شد');
+        } else {
+            return redirect()->route('admin.user.role.index')->with('error', 'خطا در ذخیره اطلاعات');
+        }
     }
 
     /**
@@ -111,8 +116,33 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        //
+        if ($role) {
+            $role->delete();
+            return redirect()->route('admin.user.role.index')->with('success', "دیتا شما با موفقیت حذف شد");
+        } else {
+            abort(404);
+        }
+    }
+
+
+    public function permissionForm(Role $role)
+    {
+        // $role->permision  = $role->permision->tan
+        $permissions = permission::all();
+        return view('admin.user.role.set_permission', compact('role', 'permissions'));
+    }
+
+    public function permissionUpdate(RoleRequest $request, Role $role)
+    {
+        $inputs = $request->all();
+        $inputs['permisions'] = $inputs['permisions'] ?? [];
+        $result  = $role->permissions()->sync($inputs['permisions']);
+        if ($result) {
+            return redirect()->route('admin.user.role.index')->with('success', 'سطح دسترسی با موفقیت ویرایش شد');
+        } else {
+            return redirect()->route('admin.user.role.index')->with('error', 'خطا در ذخیره اطلاعات');
+        }
     }
 }
