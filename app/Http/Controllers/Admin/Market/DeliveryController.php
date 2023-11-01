@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Market;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Market\DeliveryRequest;
+use App\Models\Market\Delivery;
 use Illuminate\Http\Request;
 
 class DeliveryController extends Controller
@@ -14,7 +16,9 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        return view('admin.market.delivery.index');
+        $deliveries  = Delivery::orderBy('id', 'desc')->get();
+
+        return view('admin.market.delivery.index', compact('deliveries'));
     }
 
     /**
@@ -33,9 +37,14 @@ class DeliveryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DeliveryRequest $request)
     {
-        //
+        $result = Delivery::create($request->all());
+        if ($result) {
+            return redirect()->route('admin.market.delivery.index')->with('success', " روزش ارسال جدید با موفقیت انجام شد");
+        } else {
+            return redirect()->route('admin.market.delivery.index')->with('error', " ساخت روش ارسال جدید با خطا مواجه شد");
+        }
     }
 
     /**
@@ -55,9 +64,9 @@ class DeliveryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Delivery $delivery)
     {
-        //
+        return view('admin.market.delivery.edit', compact('delivery'));
     }
 
     /**
@@ -67,9 +76,18 @@ class DeliveryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DeliveryRequest $request, Delivery $delivery)
     {
-        //
+
+
+
+        $result =  $delivery->update($request->all());
+
+        if ($result) {
+            return redirect()->route('admin.market.delivery.index')->with('success', " روش های ارسال شما با موفقیت ویرایش شد");
+        } else {
+            return redirect()->route('admin.market.delivery.index')->with('success', "ساخت  پیامک با خطا مواجه شد");
+        }
     }
 
     /**
@@ -78,8 +96,14 @@ class DeliveryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Delivery $delivery)
     {
-        //
+
+        if ($delivery) {
+            $delivery->delete();
+            return redirect()->route('admin.market.delivery.index')->with('success', "دیتا شما با موفقیت حذف شد");
+        } else {
+            abort(404);
+        }
     }
 }
