@@ -25,7 +25,7 @@ class DeliveryRequest extends FormRequest
             return [
                 'name' => 'required|string|min:2|max:150',
                 'amount' => 'required|min:5|max:100',
-                'delivery_time' => 'required|integer|min:3|max:20',
+                'delivery_time' => 'required|integer|min:1|max:20',
                 'delivery_time_unit' => 'required|string|min:2|max:100',
                 // 'status' => 'required|numeric|in:0,1',
             ];
@@ -33,7 +33,7 @@ class DeliveryRequest extends FormRequest
             return [
                 'name' => 'required|string|min:2|max:150',
                 'amount' => 'required|min:5|max:100',
-                'delivery_time' => 'required|integer|min:3|max:20',
+                'delivery_time' => 'required|integer|min:1|max:20',
                 'delivery_time_unit' => 'required|string|min:2|max:100',
                 // 'status' => 'required|numeric|in:0,1',
             ];

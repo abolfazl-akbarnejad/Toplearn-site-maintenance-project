@@ -43,23 +43,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($deliveries as $key => $delivery)
+                            @foreach ($delivery_methode as $key => $delivery)
                                 <tr>
                                     <th>{{ $key + 1 }}</th>
                                     <td>{{ $delivery->name }}</td>
                                     <td>{{ $delivery->amount }}</td>
                                     <td>{{ $delivery->delivery_time . ' ' . $delivery->delivery_time_unit }}</td>
                                     <td class="width-16-rem text-left">
-                                        <a href="{{route('admin.market.delivery.edit' , $delivery->id)}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>
+                                        <a href="{{ route('admin.market.delivery.edit', $delivery->id) }}"
+                                            class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>
                                             ویرایش</a>
-                                            <form action="{{ route('admin.market.delivery.destroy', $delivery->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-danger btn-sm delete" type="submit"><i
-                                                        class="fa fa-trash-alt"></i>
-                                                    حذف</button>
-                                            </form>
+                                        <form action="{{ route('admin.market.delivery.destroy', $delivery->id) }}"
+                                            method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm delete" type="submit"><i
+                                                    class="fa fa-trash-alt"></i>
+                                                حذف</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

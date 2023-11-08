@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('amount', 10, 1);
+            $table->decimal('amount', 20, 3);
             $table->integer('delivery_time')->comment('زمان تحویل');
             $table->string('delivery_time_unit')->comment('واحد زمان تحویل');
             $table->tinyInteger('status')->default(0)->comment('0=> unActive  , 1 =>Active');

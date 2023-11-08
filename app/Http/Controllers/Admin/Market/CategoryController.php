@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin\Market;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Market\ProductCategoryRequest;
+use App\Http\Services\Image\ImageService;
+use App\Models\Market\ProductCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -14,7 +17,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.market.category.index');
+        $productCategories = ProductCategory::orderBy('created_at', 'desc')->simplePaginate(15);
+        return view('admin.market.category.index', compact('productCategories'));
     }
 
     /**
@@ -24,7 +28,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.market.category.create');
+        $categories = ProductCategory::where('parent_id', null)->get();
+        return view('admin.market.category.create', compact('categories'));
     }
 
     /**
@@ -33,9 +38,17 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductCategoryRequest $request, ImageService $imageService)
     {
-        //
+        $inputs = $request->all();
+        if ($request->hasFile('image')) {
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'product-category');
+            $resultImage =  $imageService->fitAndSave($request->file('image'), 60, 60);
+            $inputs['image'] = $resultImage;
+        }
+
+        ProductCategory::create($inputs);
+        return redirect()->route('admin.market.category.index')->with('success', 'دسته بندی شما با موفقیت ثبت شد');
     }
 
     /**
@@ -55,9 +68,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(ProductCategory $category)
     {
-        //
+        $product_categories = ProductCategory::where('parent_id', null)->where('id', '!=', $category->id)->get();
+        return view('admin.market.category.edit', compact('product_categories', 'category'));
     }
 
     /**
@@ -67,9 +81,20 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductCategoryRequest $request, ProductCategory $category, ImageService $imageService)
     {
-        //
+
+        $inputs = $request->all();
+        if ($request->hasFile('image')) {
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'product-category');
+            $resultImage =  $imageService->fitAndSave($request->file('image'), 60, 60);
+            $imageService->deleteImage($category->image);
+            $inputs['image'] = $resultImage;
+        }
+        $inputs['parent_id'] == 0 ? $inputs['parent_id'] = null : $inputs['parent_id'];
+
+        $category->update($inputs);
+        return redirect()->route('admin.market.category.index')->with('success', 'دسته بندی شما با موفقیت ویرایش شد');
     }
 
     /**
@@ -78,8 +103,32 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ProductCategory $category, ImageService $imageService)
     {
-        //
+
+        if ($category) {
+            $category->delete();
+            $imageService->deleteImage($category->image);
+            return redirect()->route('admin.market.category.index')->with('success', "دیتا شما با موفقیت حذف شد");
+        } else {
+            abort(404);
+        }
+    }
+
+
+    public function status(ProductCategory $category)
+    {
+
+        $category->status = $category->status == 0 ? 1 : 0;
+        $result = $category->save();
+        if ($result) {
+            if ($category->status == 0) {
+                return response()->json(['status' => true, 'checked' => false]);
+            } else {
+                return response()->json(['status' => true, 'checked' => true]);
+            }
+        } else {
+            return response()->json(['status' => false]);
+        }
     }
 }

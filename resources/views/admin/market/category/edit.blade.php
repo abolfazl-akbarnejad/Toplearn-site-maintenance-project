@@ -2,7 +2,7 @@
 
 @section('head-tag')
     <title>
-        دسته بندی</title>
+        ویرایش دسته بندی </title>
 @endsection
 
 @section('content')
@@ -11,7 +11,7 @@
             <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
             <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
             <li class="breadcrumb-item font-size-12"> <a href="#">دسته بندی</a></li>
-            <li class="breadcrumb-item font-size-12 active" aria-current="page"> ایجاد دسته بندی</li>
+            <li class="breadcrumb-item font-size-12 active" aria-current="page"> ویرایش دسته بندی</li>
         </ol>
     </nav>
 
@@ -21,7 +21,7 @@
             <section class="main-body-container">
                 <section class="main-body-container-header">
                     <h5>
-                        ایجاد دسته بندی
+                        ویرایش دسته بندی
                     </h5>
                 </section>
 
@@ -30,16 +30,17 @@
                 </section>
 
                 <section>
-                    <form action="{{ route('admin.market.category.store') }}" method="POST" enctype="multipart/form-data"
+                    <form action="{{ route('admin.market.category.update' , $category->id) }}" method="POST" enctype="multipart/form-data"
                         id="form">
                         @csrf
+                        @method('PUT')
                         <section class="row">
 
                             <section class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label for="">نام دسته</label>
                                     <input type="text" class="form-control form-control-sm" name="name"
-                                        value="{{ old('name') }}">
+                                        value="{{ old('name', $category->name) }}">
                                 </div>
                                 <div class=""> @error('name')
                                         <span class="alert_require text-danger ">
@@ -55,7 +56,7 @@
                                 <div class="form-group">
                                     <label for="tags">تگ ها</label>
                                     <input type="hidden" class="form-control form-control-sm" name="tags" id="tags"
-                                        value="{{ old('tags') }}">
+                                        value="{{ old('tags', $category->tags) }}">
                                     <select class="select2 form-control form-control-sm" id="select_tags" multiple>
 
                                     </select>
@@ -73,6 +74,7 @@
                                 <div class="form-group">
                                     <label for="">تصویر</label>
                                     <input type="file" class="form-control form-control-sm" name="image">
+                                    <img src="{{asset($category->image)}}" class="m-3" alt="">
                                 </div>
                                 <div class=""> @error('image')
                                         <span class="alert_require text-danger ">
@@ -88,9 +90,9 @@
                                 <div class="form-group">
                                     <label for="">وضعیت</label>
                                     <select name="status" id="" class="form-control form-control-sm">
-                                        <option value="0" @if (old('status') == 0) selected @endif> غیرفعال
+                                        <option value="0" @if (old('status', $category->status) == 0) selected @endif> غیرفعال
                                         </option>
-                                        <option value="1" @if (old('status') == 1) selected @endif> فعال
+                                        <option value="1" @if (old('status', $category->status) == 1) selected @endif> فعال
                                         </option>
                                     </select>
                                 </div>
@@ -101,9 +103,9 @@
                                 <div class="form-group">
                                     <label for="">وضعیت نمایش در منو</label>
                                     <select name="show_in_menu" id="" class="form-control form-control-sm">
-                                        <option value="0" @if (old('show_in_menu') == 0) selected @endif> غیرفعال
+                                        <option value="0" @if (old('show_in_menu', $category->show_in_menu) == 0) selected @endif> غیرفعال
                                         </option>
-                                        <option value="1" @if (old('show_in_menu') == 1) selected @endif> فعال
+                                        <option value="1" @if (old('show_in_menu', $category->show_in_menu) == 1) selected @endif> فعال
                                         </option>
                                     </select>
                                 </div>
@@ -113,13 +115,13 @@
                                 <div class="form-group">
                                     <label for="">منو والد</label>
                                     <select name="parent_id" id="" class="form-control form-control-sm">
-                                        <option value="0" @if (old('parent_id') == 0) selected @endif>منوی اصلی
+                                        <option value="0" @if (old('parent_id', $category->parent_id) == 0) selected @endif>منوی اصلی
                                         </option>
 
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}"
-                                                @if ($category->id == old('parent_id')) selected @endif>
-                                                {{ $category->name }}
+                                        @foreach ($product_categories as $product_category)
+                                            <option value="{{ $product_category->id }}"
+                                                @if ($product_category->id == old('parent_id', $product_category->parent_id)) selected @endif>
+                                                {{ $product_category->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -137,7 +139,7 @@
                             <section class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label for="">توضیحات</label>
-                                    <textarea name="description" id="description">{{ old('description') }}</textarea>
+                                    <textarea name="description" id="description">{{ old('description', $category->description) }}</textarea>
                                 </div>
                                 <div class="mb-4"> @error('description')
                                         <span class="alert_require text-danger ">

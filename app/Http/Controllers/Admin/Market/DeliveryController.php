@@ -16,9 +16,9 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $deliveries  = Delivery::orderBy('id', 'desc')->get();
+        $delivery_methode  = Delivery::orderBy('id', 'desc')->get();
 
-        return view('admin.market.delivery.index', compact('deliveries'));
+        return view('admin.market.delivery.index', compact('delivery_methode'));
     }
 
     /**

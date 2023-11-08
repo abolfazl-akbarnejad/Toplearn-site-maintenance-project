@@ -86,15 +86,15 @@
                                 <div class="form-group">
                                     <label for="">واحد زمان ارسال</label>
                                     <select name="delivery_time_unit" id="" class="form-control form-control-sm">
-                                        <option value="دقیقه" @if (old('delivery_time_unit') == 0) selected @endif> دقیقه
+                                        <option value="دقیقه" @if (old('delivery_time_unit') == 'دقیقه') selected @endif> دقیقه
                                         </option>
-                                        <option value="ساعت" @if (old('delivery_time_unit') == 1) selected @endif> ساعت
+                                        <option value="ساعت" @if (old('delivery_time_unit') == 'ساعت') selected @endif> ساعت
                                         </option>
-                                        <option value="روز" @if (old('delivery_time_unit') == 1) selected @endif> روز
+                                        <option value="روز" @if (old('delivery_time_unit') == 'روز') selected @endif> روز
                                         </option>
-                                        <option value="هفته" @if (old('delivery_time_unit') == 1) selected @endif> هفته
+                                        <option value="هفته" @if (old('delivery_time_unit') == 'هفته') selected @endif> هفته
                                         </option>
-                                        <option value="ماه" @if (old('delivery_time_unit') == 1) selected @endif> ماه
+                                        <option value="ماه" @if (old('delivery_time_unit') == 'ماه') selected @endif> ماه
                                         </option>
                                     </select>
                                 </div>
