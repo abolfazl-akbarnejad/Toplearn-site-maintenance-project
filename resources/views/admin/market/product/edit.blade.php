@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-    <title>ایجاد کالا</title>
+    <title>ویرایش کالا</title>
     <link rel="stylesheet" href="{{ asset('admin-assets/jalalidatepicker/persian-datepicker.min.css') }}">
 @endsection
 
@@ -11,7 +11,7 @@
             <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
             <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
             <li class="breadcrumb-item font-size-12"> <a href="#">کالا </a></li>
-            <li class="breadcrumb-item font-size-12 active" aria-current="page"> ایجاد کالا</li>
+            <li class="breadcrumb-item font-size-12 active" aria-current="page"> ویرایش کالا</li>
         </ol>
     </nav>
 
@@ -21,7 +21,7 @@
             <section class="main-body-container">
                 <section class="main-body-container-header">
                     <h5>
-                        ایجاد کالا
+                        ویرایش کالا
                     </h5>
                 </section>
 
@@ -30,16 +30,17 @@
                 </section>
 
                 <section>
-                    <form action="{{ route('admin.market.product.store') }}" method="POST" enctype="multipart/form-data"
-                        id="form">
+                    <form action="{{ route('admin.market.product.update', $product->id) }}" method="POST"
+                        enctype="multipart/form-data" id="form">
                         @csrf
+                        @method('PUT')
                         <section class="row">
 
                             <section class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label for="">نام کالا</label>
                                     <input type="text" class="form-control form-control-sm" name="name"
-                                        value="{{ old('name') }}">
+                                        value="{{ old('name', $product->name) }}">
                                 </div>
                                 @error('name')
                                     <div class="">
@@ -60,7 +61,7 @@
                                     <select name="category_id" id="" class="form-control form-control-sm">
                                         @foreach ($productCategories as $productCategory)
                                             <option value="{{ $productCategory->id }}"
-                                                @if (old('category_id') == $productCategory->id) selected @endif>
+                                                @if (old('category_id', $product->category_id) == $productCategory->id) selected @endif>
                                                 {{ $productCategory->name }}
                                             </option>
                                         @endforeach
@@ -85,7 +86,7 @@
                                     <select name="brand_id" id="" class="form-control form-control-sm">
                                         @foreach ($brands as $brand)
                                             <option value="{{ $brand->id }}"
-                                                @if (old('brand_id') == $brand->id) selected @endif>
+                                                @if (old('brand_id', $product->brand_id) == $brand->id) selected @endif>
                                                 {{ $brand->persian_name }}
                                             </option>
                                         @endforeach
@@ -123,7 +124,7 @@
                                 <div class="form-group">
                                     <label for="">قیمت کالا</label>
                                     <input type="text" class="form-control form-control-sm" name="price"
-                                        value="{{ old('price') }}">
+                                        value="{{ old('price', $product->price) }}">
                                 </div>
                                 @error('price')
                                     <div class="">
@@ -140,7 +141,7 @@
                                 <div class="form-group">
                                     <label for="tags">تگ ها</label>
                                     <input type="hidden" class="form-control form-control-sm" name="tags" id="tags"
-                                        value="{{ old('tags') }}">
+                                        value="{{ old('tags', $product->tags) }}">
                                     <select class="select2 form-control form-control-sm" id="select_tags" multiple>
                                     </select>
 
@@ -165,9 +166,9 @@
                                 <div class="form-group">
                                     <label for="">وضعیت</label>
                                     <select name="status" id="" class="form-control form-control-sm">
-                                        <option value="0" @if (old('status') == 0) selected @endif> غیرفعال
+                                        <option value="0" @if (old('status', $product->status) == 0) selected @endif> غیرفعال
                                         </option>
-                                        <option value="1" @if (old('status') == 1) selected @endif> فعال
+                                        <option value="1" @if (old('status', $product->status) == 1) selected @endif> فعال
                                         </option>
                                     </select>
                                 </div>
@@ -189,9 +190,9 @@
                                 <div class="form-group">
                                     <label for="">امکان فروش</label>
                                     <select name="marketable" id="" class="form-control form-control-sm">
-                                        <option value="0" @if (old('marketable') == 0) selected @endif> غیرفعال
+                                        <option value="0" @if (old('marketable', $product->marketable) == 0) selected @endif> غیرفعال
                                         </option>
-                                        <option value="1" @if (old('marketable') == 1) selected @endif> فعال
+                                        <option value="1" @if (old('marketable', $product->marketable) == 1) selected @endif> فعال
                                         </option>
                                     </select>
                                 </div>
@@ -214,8 +215,11 @@
                                 <div class="form-group">
                                     <label for="">تاریخ انتشار</label>
                                     <input type="text" name="published_at" id="published_at"
-                                        class="form-control form-control-sm d-none" value="{{ old('published_at') }}">
-                                    <input type="text" id="published_at_view" class="form-control form-control-sm">
+                                        class="form-control form-control-sm d-none"
+                                        value="{{ old('published_at', $product->published_at) }}">
+                                    <input type="text" id="published_at_view"
+                                        value="{{ old('published_at', $product->published_at) }}"
+                                        class="form-control form-control-sm">
                                 </div>
                                 @error('published_at')
                                     <div class="">
@@ -236,7 +240,7 @@
                                 <div class="form-group">
                                     <label for="">وزن</label>
                                     <input type="text" class="form-control form-control-sm" name="weght"
-                                        value="{{ old('weght') }}">
+                                        value="{{ old('weght', $product->weght) }}">
                                 </div>
                                 @error('weght')
                                     <div class="">
@@ -255,7 +259,7 @@
                                 <div class="form-group">
                                     <label for="">طول</label>
                                     <input type="text" class="form-control form-control-sm" name="length"
-                                        value="{{ old('length') }}">
+                                        value="{{ old('length', $product->length) }}">
                                 </div>
                                 @error('length')
                                     <div class="">
@@ -276,7 +280,7 @@
                                 <div class="form-group">
                                     <label for="">عرض</label>
                                     <input type="text" class="form-control form-control-sm" name="width"
-                                        value="{{ old('width') }}">
+                                        value="{{ old('width', $product->width) }}">
                                 </div>
                                 @error('width')
                                     <div class="">
@@ -296,7 +300,7 @@
                                 <div class="form-group">
                                     <label for="">ارتفاع</label>
                                     <input type="text" class="form-control form-control-sm" name="height"
-                                        value="{{ old('height') }}">
+                                        value="{{ old('height', $product->height) }}">
                                 </div>
                                 @error('height')
                                     <div class="">
@@ -317,7 +321,7 @@
                                 <div class="form-group">
                                     <label for="">طول</label>
                                     <input type="text" class="form-control form-control-sm" name="lenght"
-                                        value="{{ old('lenght') }}">
+                                        value="{{ old('lenght', $product->lenght) }}">
                                 </div>
                                 @error('lenght')
                                     <div class="">
@@ -336,7 +340,7 @@
                             <section class="col-12">
                                 <div class="form-group">
                                     <label for="">توضیحات</label>
-                                    <textarea name="interoduction" id="interoduction" class="form-control form-control-sm" rows="6">{{ old('interoduction') }}</textarea>
+                                    <textarea name="interoduction" id="interoduction" class="form-control form-control-sm" rows="6">{{ old('interoduction', $product->interoduction) }}</textarea>
                                 </div>
                                 @error('interoduction')
                                     <div class="">
@@ -352,6 +356,18 @@
 
 
                             <section class="col-12 border-top border-bottom py-3 mb-3">
+
+
+                                <section class="col-12 border-top border-bottom py-3 mb-3">
+                                    <h4>ویژگی های ذخیره شده</h4>
+                                    @foreach ($product->metas as $meta)
+                                        <div class="d-flex m-3"></div>
+                                        <span>{{ $meta->meta_key }} : </span>
+                                        <span>{{ $meta->meta_value }}</span>
+                                     
+                                    @endforeach
+
+                                </section>
 
                                 <section class="row">
 

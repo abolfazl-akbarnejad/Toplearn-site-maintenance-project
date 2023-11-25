@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin\Market;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Market\BrandRequest;
+use App\Http\Services\Image\ImageService;
+use App\Models\Market\Brand;
+use Faker\Provider\Image;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -14,7 +18,9 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return view('admin.market.brand.index');
+        $brands = Brand::orderBy('created_at', 'desc')->simplePaginate(15);
+
+        return view('admin.market.brand.index', compact('brands'));
     }
 
     /**
@@ -33,9 +39,17 @@ class BrandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BrandRequest $request, ImageService $imageService)
     {
-        //
+        $inputs = $request->all();
+        if ($request->hasFile('logo')) {
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'brand');
+            $resultImage =  $imageService->fitAndSave($request->file('logo'), 60, 60);
+            $inputs['logo'] = $resultImage;
+        }
+
+        Brand::create($inputs);
+        return redirect()->route('admin.market.brand.index')->with('success', 'برند  شما با موفقیت ثبت شد');
     }
 
     /**
@@ -55,9 +69,9 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Brand  $brand)
     {
-        //
+        return view('admin.market.brand.edit', compact('brand'));
     }
 
     /**
@@ -67,9 +81,18 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BrandRequest $request, Brand  $brand, ImageService $imageService)
     {
-        //
+        $inputs = $request->all();
+        if ($request->hasFile('logo')) {
+            $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'brand');
+            $resultImage =  $imageService->fitAndSave($request->file('logo'), 60, 60);
+            $imageService->deleteImage($brand->logo);
+            $inputs['logo'] = $resultImage;
+        }
+
+        $result = $brand->update($inputs);
+        return redirect()->route('admin.market.brand.index')->with('success', 'برند  شما با موفقیت ثبت شد');
     }
 
     /**
@@ -78,8 +101,28 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Brand  $brand)
     {
-        //
+        if ($brand) {
+            $brand->delete();
+            return redirect()->route('admin.market.brand.index')->with('success', "دیتا شما با موفقیت حذف شد");
+        } else {
+            abort(404);
+        }
+    }
+    public function status(Brand  $brand)
+    {
+
+        $brand->status = $brand->status == 0 ? 1 : 0;
+        $result = $brand->save();
+        if ($result) {
+            if ($brand->status == 0) {
+                return response()->json(['status' => true, 'checked' => false]);
+            } else {
+                return response()->json(['status' => true, 'checked' => true]);
+            }
+        } else {
+            return response()->json(['status' => false]);
+        }
     }
 }

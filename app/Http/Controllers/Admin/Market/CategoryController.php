@@ -18,6 +18,7 @@ class CategoryController extends Controller
     public function index()
     {
         $productCategories = ProductCategory::orderBy('created_at', 'desc')->simplePaginate(15);
+
         return view('admin.market.category.index', compact('productCategories'));
     }
 

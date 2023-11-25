@@ -52,7 +52,7 @@
                                         @if ($productCategory->parent_id == null)
                                             دسته اصلی
                                         @else
-                                            {{ $productCategory->children->name }}
+                                         
                                         @endif
                                     </td>
                                     <td>
