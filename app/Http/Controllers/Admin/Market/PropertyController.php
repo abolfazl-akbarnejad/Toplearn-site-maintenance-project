@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin\Market;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Market\CategoryAttributeRequest;
+use App\Models\Market\CategoryAttribute;
+use App\Models\Market\Product;
+use App\Models\Market\ProductCategory;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -14,7 +18,9 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return view('admin.market.property.index');
+        $category_attributes = CategoryAttribute::orderBy('created_at', 'desc')->get();
+
+        return view('admin.market.property.index', compact('category_attributes'));
     }
 
     /**
@@ -24,7 +30,8 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        return view('admin.market.property.create');
+        $product_categories = ProductCategory::all();
+        return view('admin.market.property.create', compact('product_categories'));
     }
 
     /**
@@ -33,9 +40,15 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryAttributeRequest $request)
     {
-        //
+
+        $result  = CategoryAttribute::create($request->all());
+        if ($result) {
+            return redirect()->route('admin.market.property.index')->with('success', 'فرم  جدید با موفقیت ساخته شد');
+        } else {
+            return redirect()->route('admin.market.property.index')->with('error', 'خطا در ذخیره اطلاعات');
+        }
     }
 
     /**
@@ -55,9 +68,11 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(CategoryAttribute $category_attribute)
     {
-        //
+        $product_categories = ProductCategory::all();
+
+        return view('admin.market.property.edit', compact('category_attribute', 'product_categories'));
     }
 
     /**
@@ -67,9 +82,14 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryAttributeRequest $request, CategoryAttribute $category_attribute)
     {
-        //
+        $result  = $category_attribute->update($request->all());
+        if ($result) {
+            return redirect()->route('admin.market.property.index')->with('success', 'فرم  جدید با موفقیت ویرایش شد');
+        } else {
+            return redirect()->route('admin.market.property.index')->with('error', 'خطا در ذخیره اطلاعات');
+        }
     }
 
     /**
@@ -78,8 +98,13 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(CategoryAttribute $category_attribute)
     {
-        //
+        if ($category_attribute) {
+            $category_attribute->delete();
+            return redirect()->route('admin.market.property.value.index')->with('success', "دیتا شما با موفقیت حذف شد");
+        } else {
+            abort(404);
+        }
     }
 }

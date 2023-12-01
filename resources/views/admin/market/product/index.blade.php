@@ -60,8 +60,8 @@
                                                 <i class="fa fa-tools"></i> عملیات
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a href="" class="dropdown-item text-right"><i
-                                                        class="fa fa-images"></i>
+                                                <a href="{{ route('admin.market.product.gallery.index', $product->id) }}"
+                                                    class="dropdown-item text-right"><i class="fa fa-images"></i>
                                                     گالری</a>
                                                 <a href="{{ route('admin.market.product.color.index', $product->id) }}"
                                                     class="dropdown-item text-right"><i class="fa fa-list-ul"></i>

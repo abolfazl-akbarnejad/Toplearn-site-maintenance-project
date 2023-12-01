@@ -29,15 +29,16 @@
                 </section>
 
                 <section>
-                    <form action="{{ route('admin.market.property.store') }}" method="POST">
+                    <form action="{{ route('admin.market.property.update' ,$category_attribute->id ) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <section class="row">
 
                             <section class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label for="">نام فرم</label>
                                     <input type="text" name="name" class="form-control form-control-sm"
-                                        value="{{ old('name') }}">
+                                        value="{{ old('name'  , $category_attribute->name) }}">
                                 </div>
 
                                 @error('name')
@@ -55,7 +56,7 @@
                                 <div class="form-group">
                                     <label for="">واحد اندازه گیری</label>
                                     <input type="text" name="unit" class="form-control form-control-sm"
-                                        value="{{ old('unit') }}">
+                                        value="{{ old('unit' , $category_attribute->unit) }}">
                                 </div>
 
                                 @error('unit')
@@ -75,7 +76,7 @@
                                     <select name="category_id" id="" class="form-control form-control-sm">
                                         @foreach ($product_categories as $product_category)
                                             <option value="{{ $product_category->id }}"
-                                                @if (old('category_id') == $product_category->id) selected @endif>
+                                                @if (old('category_id' , $category_attribute->category_id) == $product_category->id) selected @endif>
                                                 {{ $product_category->name }}
                                             </option>
                                         @endforeach

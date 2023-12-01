@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-    <title>فرم کالا</title>
+    <title>عکس های کالا</title>
 @endsection
 
 @section('content')
@@ -9,7 +9,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
             <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
-            <li class="breadcrumb-item font-size-12 active" aria-current="page"> فرم کالا</li>
+            <li class="breadcrumb-item font-size-12"> <a href="#">کالا ها</a></li>
+            <li class="breadcrumb-item font-size-12 active" aria-current="page"> عکس های کالا</li>
         </ol>
     </nav>
 
@@ -19,45 +20,42 @@
             <section class="main-body-container">
                 <section class="main-body-container-header">
                     <h5>
-                        فرم کالا
+                        عکس های کالا
                     </h5>
                 </section>
 
                 <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
-                    <a href="{{ route('admin.market.property.create') }}" class="btn btn-info btn-sm">ایجاد فرم جدید</a>
+                    <a href="{{ route('admin.market.product.gallery.create', $product->id) }}"
+                        class="btn btn-info btn-sm">ایجاد
+                        عکس جدید </a>
                     <div class="max-width-16-rem">
                         <input type="text" class="form-control form-control-sm form-text" placeholder="جستجو">
                     </div>
                 </section>
 
                 <section class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover h-150px">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>نام فرم</th>
-                                <th>فرم والد</th>
+                                <th>نمایش عکس</th>
                                 <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($category_attributes as $key => $category_attribute)
+                            @foreach ($product->galleries as $key => $gallery)
                                 <tr>
                                     <th>{{ $key + 1 }}</th>
-                                    <td>{{ $category_attribute->name }} </td>
-                                    <td>{{ $category_attribute->product_category->name ?? 'خالی' }}</td>
-                                    <td class="width-22-rem text-left">
-                                        <a href="{{ route('admin.market.property.value.index', $category_attribute->id) }}"
-                                            class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> ویژگی
-                                            ها</a>
-                                        <a href="{{ route('admin.market.property.edit', $category_attribute->id) }}"
-                                            class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>
-                                            ویرایش</a>
-                                        <form action="{{ route('admin.market.property.destroy', $category_attribute->id) }}"
+                                    <td><img src="{{ asset($gallery->image) }}" width="10%" alt=""></td>
+
+
+                                    <td>
+                                        <form
+                                            action="{{ route('admin.market.product.gallery.destroy', [$product->id, $gallery->id]) }}"
                                             method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-danger  delete" type="submit"><i
+                                            <button class="btn btn-danger btn-sm delete" type="submit"><i
                                                     class="fa fa-trash-alt"></i>
                                                 حذف</button>
                                         </form>
@@ -72,4 +70,9 @@
             </section>
         </section>
     </section>
+@endsection
+@section('alert')
+    @include('admin.alerts.sweetalert.delete_conferm', ['className' => 'delete'])
+    @include('admin.alerts.sweetalert.success')
+    @include('admin.alerts.sweetalert.error')
 @endsection

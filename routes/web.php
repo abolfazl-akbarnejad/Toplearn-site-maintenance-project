@@ -27,6 +27,7 @@ use App\Http\Controllers\admin\setting\SettingController;
 use App\Http\Controllers\admin\user\PermissionController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
+use App\Http\Controllers\Admin\Market\CategoryAttriputeValueController;
 use App\Http\Controllers\Admin\Market\ProductColorController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
@@ -151,9 +152,10 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::delete('/{product}/product_color/{color}/destroy', [ProductColorController::class, 'destroy'])->name('admin.market.product.color.destroy');
 
             //gallery
-            Route::get('/gallery', [GalleryController::class, 'index'])->name('admin.market.gallery.index');
-            Route::post('/gallery/store', [GalleryController::class, 'store'])->name('admin.market.gallery.store');
-            Route::delete('/gallery/destroy/{id}', [GalleryController::class, 'destroy'])->name('admin.market.gallery.destroy');
+            Route::get('/gallery/{product}', [GalleryController::class, 'index'])->name('admin.market.product.gallery.index');
+            Route::get('/gallery/{product}/create', [GalleryController::class, 'create'])->name('admin.market.product.gallery.create');
+            Route::post('/gallery/store/{product}', [GalleryController::class, 'store'])->name('admin.market.product.gallery.store');
+            Route::delete('/gallery/{product}/destroy/{gallery}', [GalleryController::class, 'destroy'])->name('admin.market.product.gallery.destroy');
         });
 
         //property
@@ -161,9 +163,17 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/', [PropertyController::class, 'index'])->name('admin.market.property.index');
             Route::get('/create', [PropertyController::class, 'create'])->name('admin.market.property.create');
             Route::post('/store', [PropertyController::class, 'store'])->name('admin.market.property.store');
-            Route::get('/edit/{id}', [PropertyController::class, 'edit'])->name('admin.market.property.edit');
-            Route::put('/update/{id}', [PropertyController::class, 'update'])->name('admin.market.property.update');
-            Route::delete('/destroy/{id}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy');
+            Route::get('/edit/{category_attribute}', [PropertyController::class, 'edit'])->name('admin.market.property.edit');
+            Route::put('/update/{category_attribute}', [PropertyController::class, 'update'])->name('admin.market.property.update');
+            Route::delete('/destroy/{category_attribute}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy');
+
+            //value
+            Route::get('/{category_attribute}/value', [CategoryAttriputeValueController::class, 'index'])->name('admin.market.property.value.index');
+            Route::get('/value/{category_attribute}/create', [CategoryAttriputeValueController::class, 'create'])->name('admin.market.property.value.create');
+            Route::post('/value/store/{category_attribute}', [CategoryAttriputeValueController::class, 'store'])->name('admin.market.property.value.store');
+            Route::get('/value/edit/{category_attribute}/{value}', [CategoryAttriputeValueController::class, 'edit'])->name('admin.market.property.value.edit');
+            Route::put('/value/update/{category_attribute}/{value}', [CategoryAttriputeValueController::class, 'update'])->name('admin.market.property.value.update');
+            Route::delete('/value/{category_attribute}/destroy/{value}', [CategoryAttriputeValueController::class, 'destroy'])->name('admin.market.property.value.destroy');
         });
 
         //store
