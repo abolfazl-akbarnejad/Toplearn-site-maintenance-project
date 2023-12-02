@@ -50,10 +50,14 @@
                                     <th>{{ $key += 1 }}</th>
                                     <td>{{ $comment->user->id }}</td>
                                     <td>{{ $comment->user->first_name }} </td>
-                                    <td>{{ $comment->commentable_id }}</td>
-                                    <td></td>
+                                    <td>{{ $comment->post->id }}</td>
+                                    <td>{{ $comment->post->title }}</td>
+
                                     <td>
                                         {{ $comment->approved == 0 ? 'در انتظار تایید' : 'تایید شده' }}
+                                    </td>
+                                    <td>
+                                        {{ $comment->seen == 0 ? 'هنوز دیده نشده' : 'دیده شده' }}
                                     </td>
                                     <td>
                                         <label>

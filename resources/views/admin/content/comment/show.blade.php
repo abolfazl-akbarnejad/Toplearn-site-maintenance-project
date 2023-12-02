@@ -33,19 +33,21 @@
                         {{ $comment->user->first_name }} - {{ $comment->user->id }}
                     </section>
                     <section class="card-body">
-                        <h5 class="card-title">مشخصات کالا : ساعت هوشمند apple watch کد کالا : 8974938</h5>
+                        <h5 class="card-title">تایتل پست : {{ $comment->post->title }} / کد پست:{{ $comment->post->id }}
+                        </h5>
                         <p class="card-text">{{ $comment->body }}</p>
                     </section>
                 </section>
 
                 <section>
-                    <form action="" method="">
+                    <form action="{{ route('admin.content.comment.answer', $comment->id) }}" method="post">
+                        @csrf
                         <section class="row">
                             <section class="col-12">
                                 <div class="form-group">
                                     <label for="">پاسخ ادمین</label>
                                     ‍
-                                    <textarea class="form-control form-control-sm" rows="4"></textarea>
+                                    <textarea class="form-control form-control-sm" rows="4" name="body"></textarea>
                                 </div>
                             </section>
                             <section class="col-12">
@@ -53,6 +55,48 @@
                             </section>
                         </section>
                     </form>
+                </section>
+
+                <section class="m-3 ">
+                    <h4>پاسخ ها</h4>
+                    @foreach ($answers as $answer)
+                        <div class="d-flex m-4 border border-dark justify-content-between">
+                            <div class="  p-4 d-flex flex-column">
+                                <label for="">
+                                    <div class=" d-flex">نام ادمین :
+                                        {{ $answer->user->first_name . ' ' . $answer->user->last_name }}
+                                        -{{ $answer->user->id }}</div>
+
+                                </label>
+                                <span class="mt-2">
+                                    پاسخ: {{ $answer->body }}
+                                </span>
+                                <div class="">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <div class="m-4">
+                                @if ($answer->status == 0)
+                                    <a href="{{ route('admin.content.comment.answerStatus', $answer->id) }}"
+                                        class="btn btn-success">فعال</a>
+                                @else
+                                    <a href="{{ route('admin.content.comment.answerStatus', $answer->id) }}"
+                                        class="btn btn-warning">غیر فعال</a>
+                                @endif
+
+                                <form action="{{ route('admin.content.comment.destroy', $answer->id) }}"
+                                    method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger btn-sm delete" type="submit"><i
+                                            class="fa fa-trash-alt"></i>
+                                        حذف</button>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    @endforeach
                 </section>
 
             </section>

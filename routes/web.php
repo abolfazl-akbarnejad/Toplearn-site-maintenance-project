@@ -81,15 +81,31 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/status/{brand}', [BrandController::class, 'status'])->name('admin.market.brand.status');
         });
 
+        // //comment
+        // Route::prefix('comment')->group(function () {
+        //     Route::get('/', [CommentController::class, 'index'])->name('admin.market.comment.index');
+        //     Route::post('/store', [CommentController::class, 'store'])->name('admin.market.comment.store');
+        //     Route::get('/show/{id}', [CommentController::class, 'show'])->name('admin.market.comment.show');
+        //     Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('admin.market.comment.edit');
+        //     Route::put('/update/{comment}', [CommentController::class, 'update'])->name('admin.market.comment.update');
+        //     Route::delete('/destroy/{comment}', [CommentController::class, 'destroy'])->name('admin.market.comment.destroy');
+        // });
+
+
+
+
         //comment
         Route::prefix('comment')->group(function () {
             Route::get('/', [CommentController::class, 'index'])->name('admin.market.comment.index');
-            Route::post('/store', [CommentController::class, 'store'])->name('admin.market.comment.store');
-            Route::get('/show/{id}', [CommentController::class, 'show'])->name('admin.market.comment.show');
-            Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('admin.market.comment.edit');
-            Route::put('/update/{comment}', [CommentController::class, 'update'])->name('admin.market.comment.update');
+            Route::get('/show/{comment}', [CommentController::class, 'show'])->name('admin.market.comment.show');
             Route::delete('/destroy/{comment}', [CommentController::class, 'destroy'])->name('admin.market.comment.destroy');
+            Route::get('/approved/{comment}', [CommentController::class, 'approved'])->name('admin.market.comment.approved');
+            Route::get('/{comment}/status', [CommentController::class, 'status'])->name('admin.market.comment.status');
+            Route::get('/answerStatus/{comment}', [CommentController::class, 'answerStatus'])->name('admin.market.comment.answerStatus');
+            Route::post('/answer/{comment}', [CommentController::class, 'answer'])->name('admin.market.comment.answer');
         });
+
+
 
         //delivery
         Route::prefix('delivery')->group(function () {
@@ -203,13 +219,12 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
         //comment
         Route::prefix('comment')->group(function () {
             Route::get('/', [ContentCommentController::class, 'index'])->name('admin.content.comment.index');
-            // Route::post('/store', [ContentCommentController::class, 'store'])->name('admin.content.comment.store');
             Route::get('/show/{comment}', [ContentCommentController::class, 'show'])->name('admin.content.comment.show');
-            // Route::get('/edit/{comment}', [ContentCommentController::class, 'edit'])->name('admin.content.comment.edit');
-            // Route::put('/update/{comment}', [ContentCommentController::class, 'update'])->name('admin.content.comment.update');
             Route::delete('/destroy/{comment}', [ContentCommentController::class, 'destroy'])->name('admin.content.comment.destroy');
             Route::get('/approved/{comment}', [ContentCommentController::class, 'approved'])->name('admin.content.comment.approved');
-            Route::get('/status/{comment}', [ContentCommentController::class, 'status'])->name('admin.content.comment.status');
+            Route::get('/{comment}/status', [ContentCommentController::class, 'status'])->name('admin.content.comment.status');
+            Route::get('/answerStatus/{comment}', [ContentCommentController::class, 'answerStatus'])->name('admin.content.comment.answerStatus');
+            Route::post('/answer/{comment}', [ContentCommentController::class, 'answer'])->name('admin.content.comment.answer');
         });
 
         //faq
